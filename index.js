@@ -3,8 +3,8 @@
 import express from "express";
 import dotenv from 'dotenv';
 import cors from 'cors';
-
 import conectarDB from './config/db.js';
+import fileUpload from "express-fileupload";
 
 import usuarioRoutes from './routes/usuarioRoutes.js';
 import ventaRoutes from './routes/ventaRoutes.js';
@@ -15,7 +15,16 @@ dotenv.config();
 // Se le agrega toda la funcionalidad del servidor de express
 const app = express();
 app.use(express.json());
+
+app.use(fileUpload({
+    useTempFiles: true,
+    tempFileDir: './files'
+}))
+
 conectarDB();
+
+
+
 // // middlewares
 // // Se utiliza para realizar la comunicacion entre el servidor del frontend y el backend
 const dominiosPermitidos = [process.env.FRONTEND_URL];
@@ -33,8 +42,8 @@ app.use(cors(corsOptions));
 
 
 app.use('/api/usuarios', usuarioRoutes);
-app.use('/api/venta', ventaRoutes);
-app.use('/api/producto', productoRoutes);
+app.use('/api/ventas', ventaRoutes);
+app.use('/api/productos', productoRoutes);
 
 
 
